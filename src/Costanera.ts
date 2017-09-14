@@ -2,9 +2,76 @@
 
 class Costanera
 {
+	
+
 	game:Phaser.Game;
 	ancho: number;
 	alto:number;
+	doblesalto:number;
+	personaje: Phaser.Sprite;
+	cursores:Phaser.CursorKeys;
+	saltarBtn:Phaser.Key;
+		
+
+//--------------------setters y getters --------------------------------------
+
+	getDobleSalto(){
+		return this.doblesalto;	
+	}
+	setDobleSalto(value:number){
+		this.doblesalto = value;
+	}
+
+	setGame(game: Phaser.Game ){
+		this.game = game;
+	}
+
+	getGame (){
+		return this.game;
+	}
+
+	setAncho(ancho: number ){
+		this.ancho = ancho;
+	}
+
+	getAncho (){
+		return this.ancho;
+	}
+
+	setAlto(alto: number ){
+		this.alto = alto;
+	}
+
+	getAlto (){
+		return this.alto;
+	}
+
+	setPersonaje(personaje: Phaser.Sprite ){
+		this.personaje = personaje;
+	}
+
+	getPersonaje (){
+		return this.personaje;
+	}
+
+	setCursores(cursores: Phaser.CursorKeys ){
+		this.cursores = cursores;
+	}
+
+	getCursores (){
+		return this.cursores;
+	}
+
+	setSaltarBtn(saltarBtn: Phaser.Key ){
+		this.saltarBtn = saltarBtn;
+	}
+
+	getSaltarBtn (){
+		return this.saltarBtn;
+	}
+
+
+
 
 	constructor(ancho: number,alto:number)
 	{
@@ -14,7 +81,26 @@ class Costanera
 		// Phaser.AUTO - determine the renderer automatically (canvas, webgl)
 		// 'content' - the name of the container to add our game to
 		// { preload:this.preload, create:this.create} - functions to call for our states
-		this.game = new Phaser.Game( ancho, alto, Phaser.CENTER, 'content', { preload:this.preload, create:this.create} );
+		this.setGame(new Phaser.Game( ancho, alto, Phaser.CENTER, 'content', { 
+			preload:this.preload, 
+			create:this.create, 
+			update: this.update,
+			setGame: this.setGame,
+			getGame: this.getGame,
+			setAncho: this.setAncho,
+			getAncho: this.getAncho,
+			setAlto: this.setAlto,
+			getAlto: this.getAlto,
+			setPersonaje: this.setPersonaje,
+			getPersonaje: this.getPersonaje,
+			setCursores: this.setCursores,
+			getCursores: this.getCursores,
+			setSaltarBtn: this.setSaltarBtn,
+			getSaltarBtn: this.getSaltarBtn,
+			getDobleSalto: this.getDobleSalto,
+			setDobleSalto: this.setDobleSalto,
+			
+		} ));
 	}
 	
 	preload()
@@ -22,7 +108,11 @@ class Costanera
 		// add our logo image to the assets class under the
 		// key 'logo'. We're also setting the background colour
 		// so it's the same as the background colour in the image
-		this.game.load.image( 'costanera', "assets/costanera.jpg" );
+		this.getGame().load.image('player', 'assets/personajep.png');
+		this.getGame().load.image( 'costanera', "assets/costanera.jpg");
+		
+		//Agregamos un comentario para probar subir cambios a GIT desde el editor
+		//hacemos un cambio en el archivo
 		
 	}
 	
@@ -32,9 +122,61 @@ class Costanera
 		// center of the screen, and set the anchor to the center of
 		// the image so it's centered properly. There's a lot of
 		// centering in that last sentence
-		var logo = this.game.add.sprite( this.game.world.centerX, this.game.world.centerY, 'costanera' );
-		logo.anchor.setTo( 0.5, 0.5 );
+
+		//Seteamos la imagen del juego en la posicion '0,0'
+	    //y el ancho y alto de la misma según el tamaño de la ventana actual
+		var logo = this.getGame().add.sprite( this.getGame().world.centerX, this.getGame().world.centerY, 'costanera' );
+		logo.x = 0;
+		logo.y = 0;
+		logo.height = this.getGame().height;
+		logo.width = this.getGame().width;
+
+		var personaje = this.getGame().add.sprite(100, 200, 'player');
+		personaje.height = 150;
+		personaje.width = 75;
+		this.setPersonaje(personaje);
+		
+		this.getGame().physics.arcade.enable(this.getPersonaje());
+		
+		this.getPersonaje().body.collideWorldBounds = true;
+		this.getPersonaje().body.gravity.y = 500;
+		
+		this.setCursores(this.getGame().input.keyboard.createCursorKeys());
+		this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
+				
 	}
+
+	
+	update () {
+		
+			// this.game.physics.arcade.collide(this.player, platforms);
+		
+			this.getPersonaje().body.velocity.x = 0;
+		
+			if (this.getCursores().left.isDown)
+			{
+				this.getPersonaje().body.velocity.x = -250;
+			}
+			else if (this.getCursores().right.isDown)
+			{
+				this.getPersonaje().body.velocity.x = 250;
+			}
+		
+			if (this.getSaltarBtn().isDown && this.getPersonaje().body.onFloor())
+			{
+				this.getPersonaje().body.velocity.y = -400;
+				this.setDobleSalto(1);
+				this.getSaltarBtn().isDown = false;
+				console.log(this.getSaltarBtn(), "Primer Salto");
+			}
+			if(this.getSaltarBtn().isDown && this.getDobleSalto()==1)
+			{
+				this.getPersonaje().body.velocity.y = -400;
+				this.setDobleSalto(2);
+				this.getSaltarBtn().isDown = false;				
+				console.log(this.getDobleSalto, "Segundo salto");				
+			}
+		}
 }
 
 // when the page has finished loading, create our game
