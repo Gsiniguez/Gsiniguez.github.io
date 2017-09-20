@@ -5,7 +5,7 @@ class Costanera
 	game:Phaser.Game;
 	ancho: number;
 	alto:number;
-	personaje: Phaser.Sprite;
+	personaje: Personaje;
 	obstaculo: Phaser.Sprite;
 	cursores:Phaser.CursorKeys;
 	saltarBtn:Phaser.Key;
@@ -38,7 +38,7 @@ class Costanera
 		return this.alto;
 	}
 
-	setPersonaje(personaje: Phaser.Sprite ){
+	setPersonaje(personaje: Personaje ){
 		this.personaje = personaje;
 	}
 
@@ -175,8 +175,9 @@ class Costanera
 		this.setFacing('left');
 
 		//obstaculo
-		var obstaculo = this.getGame().add.sprite(300, 50, 'obstaculo');
+		var obstaculo = this.getGame().add.sprite(20, 20, 'obstaculo');
 		this.setObstaculo(obstaculo);
+		
 		obstaculo.name = 'obstaculo';
 	
 		this.getGame().physics.enable(obstaculo, Phaser.Physics.ARCADE);
@@ -197,13 +198,13 @@ class Costanera
 		this.setEmitter(emitter);
 		this.getEmitter().width = this.getGame().world.width;
 
-		this.getEmitter().makeParticles('obstaculo',null,1,true);
+		this.getEmitter().makeParticles('obstaculo',null,1,true,true);
+		
 		// emitter.minParticleScale = 0.1;
 		// emitter.maxParticleScale = 0.5;
 	
 		this.getEmitter().setYSpeed(100, 200);
 		this.getEmitter().setXSpeed(-5, 5);
-		
 		this.getEmitter().start(false, 1600, 1, 0);
 	}
 
@@ -251,14 +252,10 @@ class Costanera
 
 	collisionHandler (objetos, personaje) {
 		
-			// this.getGame().stage.backgroundColor = '#992d2d';
-			// this.getPersonaje().body.velocity.y = -800;
-			objetos.kill();
-			if(objetos.body.onFloor()){
-				personaje.kill();				
-			}
-			personaje.revive();
-		
+		// this.getGame().stage.backgroundColor = '#992d2d';
+		// this.getPersonaje().body.velocity.y = -800;
+			
+		personaje.kill();	
 		}
 
 		

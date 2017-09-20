@@ -1,3 +1,13 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 /// <reference path="../tsDefinitions/phaser.d.ts" />
 var Costanera = (function () {
     function Costanera(ancho, alto) {
@@ -127,7 +137,7 @@ var Costanera = (function () {
         this.getPersonaje().animations.add('right', [1, 2, 3, 4, 5, 6], 10, true);
         this.setFacing('left');
         //obstaculo
-        var obstaculo = this.getGame().add.sprite(300, 50, 'obstaculo');
+        var obstaculo = this.getGame().add.sprite(20, 20, 'obstaculo');
         this.setObstaculo(obstaculo);
         obstaculo.name = 'obstaculo';
         this.getGame().physics.enable(obstaculo, Phaser.Physics.ARCADE);
@@ -144,7 +154,7 @@ var Costanera = (function () {
         var emitter = this.getGame().add.emitter(this.getGame().world.centerX, 5, 5);
         this.setEmitter(emitter);
         this.getEmitter().width = this.getGame().world.width;
-        this.getEmitter().makeParticles('obstaculo', null, 1, true);
+        this.getEmitter().makeParticles('obstaculo', null, 1, true, true);
         // emitter.minParticleScale = 0.1;
         // emitter.maxParticleScale = 0.5;
         this.getEmitter().setYSpeed(100, 200);
@@ -189,11 +199,7 @@ var Costanera = (function () {
     Costanera.prototype.collisionHandler = function (objetos, personaje) {
         // this.getGame().stage.backgroundColor = '#992d2d';
         // this.getPersonaje().body.velocity.y = -800;
-        objetos.kill();
-        if (objetos.body.onFloor()) {
-            personaje.kill();
-        }
-        personaje.revive();
+        personaje.kill();
     };
     Costanera.prototype.listener = function () {
         this.getPersonaje().revive();
@@ -204,3 +210,11 @@ var Costanera = (function () {
 window.onload = function () {
     var game = new Costanera(window.innerWidth, window.innerHeight);
 };
+/// <reference path="../tsDefinitions/phaser.d.ts" />
+var Personaje = (function (_super) {
+    __extends(Personaje, _super);
+    function Personaje() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Personaje;
+}(Phaser.Sprite));
