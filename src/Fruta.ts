@@ -1,0 +1,3 @@
+class Fruta extends Bonus {
+
+}

@@ -1,0 +1,3 @@
+class Roca extends Bonus {
+
+}

@@ -8,6 +8,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var Bonus = (function (_super) {
+    __extends(Bonus, _super);
+    function Bonus() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Bonus;
+}(Phaser.Sprite));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
 var Costanera = (function () {
     function Costanera(ancho, alto) {
@@ -134,20 +141,24 @@ var Costanera = (function () {
         this.getGame().physics.startSystem(Phaser.Physics.ARCADE);
         this.getGame().time.desiredFps = 30;
         this.getGame().physics.arcade.gravity.y = 250;
+        //suelo
+        var suelo = this.getGame().add.sprite(this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
+        this.setSuelo(suelo);
+        this.getGame().physics.enable(this.getSuelo(), Phaser.Physics.BOX2D);
+        //this.getSuelo().physics.box2d.enable([this.getSuelo(),this.getEmitter()]);
+        //this.getSuelo().body.collideWorldBounds = true;
+        //this.getSuelo().body.gravity.x = 0;
+        //this.getSuelo().body.gravity.y = 0;	
+        suelo.name = 'suelo';
+        suelo.x = 0;
+        suelo.y = this.getGame().world.y + this.getGame().world.height - 30;
+        suelo.width = this.getGame().width;
+        //Personaje
         var personaje = this.getGame().add.sprite(100, 200, 'player');
         personaje.height = 200;
         personaje.width = 100;
         this.setPersonaje(personaje);
         this.getGame().physics.enable(this.getPersonaje(), Phaser.Physics.ARCADE);
-        //suelo
-        var suelo = this.getGame().add.sprite(this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
-        this.setSuelo(suelo);
-        suelo.name = 'suelo';
-        this.getGame().physics.enable(this.getSuelo(), Phaser.Physics.BOX2D);
-        suelo.x = 0;
-        suelo.y = this.getGame().world.y + this.getGame().world.height - 50;
-        suelo.width = this.getGame().width;
-        //Personaje
         this.getPersonaje().body.collideWorldBounds = true;
         this.getPersonaje().body.gravity.y = 500;
         this.getPersonaje().body.setSize(20, 36.5, 5, 16);
@@ -172,20 +183,21 @@ var Costanera = (function () {
         //emitter
         var emitter = this.getGame().add.emitter(this.getGame().world.centerX, 5, 5);
         this.setEmitter(emitter);
-        this.getEmitter().width = this.getGame().world.width;
-        this.getEmitter().makeParticles('obstaculo', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 2, true, true);
+        this.getEmitter().width = this.getGame().world.width - 10;
+        this.getEmitter().makeParticles('obstaculo', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 2, true, false);
         // emitter.minParticleScale = 0.1;
         // emitter.maxParticleScale = 0.5;
         this.getEmitter().setYSpeed(100, 200);
         this.getEmitter().setXSpeed(-1, 1);
         this.getEmitter().start(false, 3000, 1, 0);
-        this.getEmitter().bounce.setTo(0.5, 0.5);
+        //this.getEmitter().bounce.setTo(0.5, 0.5);
     };
     Costanera.prototype.update = function () {
         // this.game.physics.arcade.collide(this.player, platforms);
         //this.getGame().physics.arcade.collide(this.getObstaculo(), this.getPersonaje(), this.collisionHandler, null, this);
         this.getGame().physics.arcade.collide(this.getEmitter(), this.getPersonaje(), this.collisionHandler, null, this);
-        this.getGame().physics.arcade.collide(this.getEmitter(), this.getSuelo(), this.collisionHandler, null, this);
+        this.getGame().physics.arcade.collide(this.getEmitter(), this.getSuelo(), this.collisionHandler2, null, this);
+        this.getGame().physics.arcade.collide(this.getPersonaje(), this.getSuelo(), this.collisionHandler3, null, this);
         this.getPersonaje().body.velocity.x = 0;
         this.getPersonaje().bringToTop();
         if (this.getCursores().left.isDown) {
@@ -220,10 +232,13 @@ var Costanera = (function () {
     };
     Costanera.prototype.collisionHandler = function (objetos, personaje) {
         // this.getGame().stage.backgroundColor = '#992d2d';
-        this.getPersonaje().body.velocity.y = -800;
-        console.log(objetos.body.onFloor());
-        console.log(objetos.body.collide);
+        //this.getPersonaje().body.velocity.y = -800;
         personaje.kill();
+    };
+    Costanera.prototype.collisionHandler2 = function (objetos, suelo) {
+        suelo.kill(objetos);
+    };
+    Costanera.prototype.collisionHandler3 = function (personaje, suelo) {
     };
     Costanera.prototype.listener = function () {
         this.getPersonaje().revive();
@@ -234,6 +249,13 @@ var Costanera = (function () {
 window.onload = function () {
     var game = new Costanera(window.innerWidth, window.innerHeight);
 };
+var Fruta = (function (_super) {
+    __extends(Fruta, _super);
+    function Fruta() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Fruta;
+}(Bonus));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
 var Personaje = (function (_super) {
     __extends(Personaje, _super);
@@ -242,3 +264,10 @@ var Personaje = (function (_super) {
     }
     return Personaje;
 }(Phaser.Sprite));
+var Roca = (function (_super) {
+    __extends(Roca, _super);
+    function Roca() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Roca;
+}(Bonus));
