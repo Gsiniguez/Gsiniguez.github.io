@@ -46,13 +46,22 @@ var Costanera = /** @class */ (function () {
             setFacing: this.setFacing,
             getEmitter: this.getEmitter,
             setEmitter: this.setEmitter,
-            collisionHandler: this.collisionHandler,
+            collisionPerFrut: this.collisionPerFrut,
+            collisionSuelFrut: this.collisionSuelFrut,
             listener: this.listener,
             getSuelo: this.getSuelo,
             setSuelo: this.setSuelo,
+            getVida: this.getVida,
+            setvida: this.setVida,
         }));
     }
     //--------------------setters y getters --------------------------------------
+    Costanera.prototype.setVida = function (value) {
+        this.vida = value;
+    };
+    Costanera.prototype.getVida = function () {
+        return this.vida;
+    };
     Costanera.prototype.setSuelo = function (value) {
         this.suelo = value;
     };
@@ -145,10 +154,6 @@ var Costanera = /** @class */ (function () {
         var suelo = this.getGame().add.sprite(this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
         this.setSuelo(suelo);
         this.getGame().physics.enable(this.getSuelo(), Phaser.Physics.ARCADE);
-        //this.getSuelo().physics.box2d.enable([this.getSuelo(),this.getEmitter()]);
-        //this.getSuelo().body.collideWorldBounds = true;
-        //this.getSuelo().body.gravity.x = 0;
-        //this.getSuelo().body.gravity.y = 0;	
         suelo.name = 'suelo';
         suelo.x = 0;
         suelo.y = this.getGame().world.y + this.getGame().world.height - 30;
@@ -195,10 +200,11 @@ var Costanera = /** @class */ (function () {
     Costanera.prototype.update = function () {
         // this.game.physics.arcade.collide(this.player, platforms);
         //this.getGame().physics.arcade.collide(this.getObstaculo(), this.getPersonaje(), this.collisionHandler, null, this);
-        this.getGame().physics.arcade.collide(this.getEmitter(), this.getPersonaje(), this.collisionHandler, null, this);
-        this.getGame().physics.arcade.collide(this.getEmitter(), this.getSuelo(), this.collisionHandler2, null, this);
-        this.getGame().physics.arcade.collide(this.getPersonaje(), this.getSuelo(), this.collisionHandler3, null, this);
+        this.getGame().physics.arcade.collide(this.getEmitter(), this.getPersonaje(), this.collisionPerFrut, null, this);
+        this.getGame().physics.arcade.collide(this.getEmitter(), this.getSuelo(), this.collisionSuelFrut, null, this);
         this.getPersonaje().body.velocity.x = 0;
+        this.suelo.y = this.getGame().world.y + this.getGame().world.height - 30;
+        this.getSuelo().body.gravity = false;
         this.getPersonaje().bringToTop();
         if (this.getCursores().left.isDown) {
             this.getPersonaje().body.velocity.x = -500;
@@ -226,19 +232,24 @@ var Costanera = /** @class */ (function () {
                 this.setFacing('idle');
             }
         }
-        if (this.getSaltarBtn().isDown && (this.getPersonaje().body.onFloor())) {
-            this.getPersonaje().body.velocity.y = -800;
-        }
     };
-    Costanera.prototype.collisionHandler = function (objetos, personaje) {
+    Costanera.prototype.collisionPerFrut = function (objetos, personaje) {
         // this.getGame().stage.backgroundColor = '#992d2d';
         //this.getPersonaje().body.velocity.y = -800;
         personaje.kill();
+        if (personaje.kill()) {
+            console.log(this.vida);
+        }
+        if (this.getVida() == 2) {
+            personaje.kill(personaje);
+            console.log(this.getVida());
+        }
     };
-    Costanera.prototype.collisionHandler2 = function (objetos, suelo) {
-        suelo.kill(objetos);
-    };
-    Costanera.prototype.collisionHandler3 = function (personaje, suelo) {
+    Costanera.prototype.collisionSuelFrut = function (objetos, suelo) {
+        suelo.kill();
+        if (suelo.kill()) {
+            this.vida == this.vida + 1;
+        }
     };
     Costanera.prototype.listener = function () {
         this.getPersonaje().revive();

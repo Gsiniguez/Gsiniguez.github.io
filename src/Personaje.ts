@@ -2,6 +2,6 @@
 
 class Personaje extends Phaser.Sprite{
 
-    
+  
 
 }
