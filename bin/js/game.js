@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Bonus = (function (_super) {
+var Bonus = /** @class */ (function (_super) {
     __extends(Bonus, _super);
     function Bonus() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -16,7 +16,7 @@ var Bonus = (function (_super) {
     return Bonus;
 }(Phaser.Sprite));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
-var Costanera = (function () {
+var Costanera = /** @class */ (function () {
     function Costanera(ancho, alto) {
         // create our phaser game
         // 800 - width
@@ -144,7 +144,7 @@ var Costanera = (function () {
         //suelo
         var suelo = this.getGame().add.sprite(this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
         this.setSuelo(suelo);
-        this.getGame().physics.enable(this.getSuelo(), Phaser.Physics.BOX2D);
+        this.getGame().physics.enable(this.getSuelo(), Phaser.Physics.ARCADE);
         //this.getSuelo().physics.box2d.enable([this.getSuelo(),this.getEmitter()]);
         //this.getSuelo().body.collideWorldBounds = true;
         //this.getSuelo().body.gravity.x = 0;
@@ -249,7 +249,7 @@ var Costanera = (function () {
 window.onload = function () {
     var game = new Costanera(window.innerWidth, window.innerHeight);
 };
-var Fruta = (function (_super) {
+var Fruta = /** @class */ (function (_super) {
     __extends(Fruta, _super);
     function Fruta() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -257,14 +257,14 @@ var Fruta = (function (_super) {
     return Fruta;
 }(Bonus));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
-var Personaje = (function (_super) {
+var Personaje = /** @class */ (function (_super) {
     __extends(Personaje, _super);
     function Personaje() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Personaje;
 }(Phaser.Sprite));
-var Roca = (function (_super) {
+var Roca = /** @class */ (function (_super) {
     __extends(Roca, _super);
     function Roca() {
         return _super !== null && _super.apply(this, arguments) || this;

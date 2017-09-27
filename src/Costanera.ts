@@ -176,7 +176,7 @@ class Costanera
 		//suelo
 		var suelo = this.getGame().add.sprite(this.getGame().world.centerX,this.getGame().world.centerY,'suelo');
 		this.setSuelo(suelo);
-		this.getGame().physics.enable(this.getSuelo(),Phaser.Physics.BOX2D);
+		this.getGame().physics.enable(this.getSuelo(),Phaser.Physics.ARCADE);
 		//this.getSuelo().physics.box2d.enable([this.getSuelo(),this.getEmitter()]);
 		//this.getSuelo().body.collideWorldBounds = true;
 		//this.getSuelo().body.gravity.x = 0;
