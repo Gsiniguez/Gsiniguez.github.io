@@ -13,11 +13,16 @@ class Costanera
 	saltarBtn:Phaser.Key;
 	facing: string;
 	emitter: Phaser.Particles.Arcade.Emitter;
+	vidaTexto: Phaser.Text;
+	puntos: number;
+	puntosTexto: Phaser.Text;
+	gameover: Phaser.Text;
+
 	
 
 //--------------------setters y getters --------------------------------------
 	
-	setVida(value:number){
+	setVida(value){
 		this.vida = value;
 	}
 
@@ -105,7 +110,37 @@ class Costanera
 		return this.emitter;
 	}
 
+	setVidaTexto(value){
+		this.vidaTexto = value;
+	}
 
+	getVidaTexto(){
+		return this.vidaTexto;
+	}
+
+	setPuntos(value){
+		this.puntos = value;
+	}
+
+	getPuntos(){
+		return this.puntos;
+	}
+
+	setPuntosTexto(value){
+		this.puntosTexto = value
+	}
+
+	getPuntosTexto(){
+		return this.puntosTexto;
+	}
+
+	setGameOver(value){
+		this.gameover = value;
+	}
+
+	getGameOver(){
+		return this.gameover;
+	}
 
 
 	constructor(ancho: number,alto:number)
@@ -144,7 +179,15 @@ class Costanera
 			getSuelo : this.getSuelo,
 			setSuelo: this.setSuelo,
 			getVida: this.getVida,
-			setvida: this.setVida,
+			setVida: this.setVida,
+			getVidaTexto: this.getVidaTexto,
+			setVidaTexto: this.setVidaTexto,
+			getPuntos: this.getPuntos,
+			setPuntos: this.setPuntos,
+			getPuntosTexto: this.getPuntosTexto,
+			setPuntosTexto: this.setPuntosTexto,
+			getGameOver: this.getGameOver,
+			setGameOver: this.setGameOver,
 		} ));
 	}
 	
@@ -158,6 +201,7 @@ class Costanera
 		this.getGame().load.spritesheet('player', 'assets/Personaje.png', 36.5, 48);
 		this.getGame().load.image( 'costanera', "assets/costanera.jpg" );
 		this.getGame().load.spritesheet('suelo', "assets/suelotile.png",this.getGame().width,10,100 );
+		this.getGame().load.image('gameover', "assets/gameover.png" )
 		
 		//Agregamos un comentario para probar subir cambios a GIT desde el editor
 		//hacemos un cambio en el archivo
@@ -252,54 +296,79 @@ class Costanera
 		this.getEmitter().setXSpeed(-1, 1);
 		this.getEmitter().start(false, 3000, 1, 0);
 		//this.getEmitter().bounce.setTo(0.5, 0.5);
+
+		//Score
+		this.setPuntos(0);
+		var scoreString = 'Puntos : ';
+		var scoreText = this.getGame().add.text(this.getGame().world.width/2, 10, scoreString + this.getPuntos(), { font: '34px Arial', fill: '#fff' });
+		this.setPuntosTexto(scoreText);
+		//this.getPuntosTexto().text = this.getPuntos().toString();
+
+		//  Lives
+		this.setVida(5);
+ 		//var lives = this.getGame().add.group();
+		var liveText = this.getGame().add.text(10, 10, 'Vidas : ' + this.getVida(), { font: '34px Arial', fill: '#fff' });
+		this.setVidaTexto(liveText);
+
+		
+
+
+		
+		
+	
+
 	}
 
 	
 	update () {
 		
-			// this.game.physics.arcade.collide(this.player, platforms);
-			//this.getGame().physics.arcade.collide(this.getObstaculo(), this.getPersonaje(), this.collisionHandler, null, this);
-			this.getGame().physics.arcade.collide(this.getEmitter(),this.getPersonaje(),this.collisionPerFrut,null, this);
-			this.getGame().physics.arcade.collide(this.getEmitter(),this.getSuelo(),this.collisionSuelFrut,null,this);
-						
-			this.getPersonaje().body.velocity.x = 0;
-			
-			this.suelo.y = this.getGame().world.y+this.getGame().world.height-30;
-			this.getSuelo().body.gravity = false;
+		// this.game.physics.arcade.collide(this.player, platforms);
+		//this.getGame().physics.arcade.collide(this.getObstaculo(), this.getPersonaje(), this.collisionHandler, null, this);
+		this.getGame().physics.arcade.collide(this.getEmitter(),this.getPersonaje(),this.collisionPerFrut,null, this);
+		this.getGame().physics.arcade.collide(this.getEmitter(),this.getSuelo(),this.collisionSuelFrut,null,this);
+					
+		this.getPersonaje().body.velocity.x = 0;
 		
-			
+		this.suelo.y = this.getGame().world.y+this.getGame().world.height-30;
+		this.getSuelo().body.gravity = false;
+		
+		
 
-			this.getPersonaje().bringToTop();
+		this.getPersonaje().bringToTop();
 		
-			if (this.getCursores().left.isDown)
-			{
-				this.getPersonaje().body.velocity.x = -500;
-				if (this.getFacing() != 'left'){
-						this.getPersonaje().animations.play('left');
-						this.setFacing('left');
-				}
+		if (this.getCursores().left.isDown)
+		{
+			this.getPersonaje().body.velocity.x = -500;
+			if (this.getFacing() != 'left'){
+					this.getPersonaje().animations.play('left');
+					this.setFacing('left');
 			}
-			else if (this.getCursores().right.isDown){
-				this.getPersonaje().body.velocity.x = 500;
-				if (this.getFacing() != 'right'){
-						this.getPersonaje().animations.play('right');
-						this.setFacing('right');
-				}
-			} else {
-				if (this.getFacing() != 'idle'){
-						this.getPersonaje().animations.stop();
-			
-						if (this.getFacing() == 'left'){
-							this.getPersonaje().frame = 8;
-						}
-						else{
-							this.getPersonaje().frame = 7;
-						}
-						this.setFacing('idle')
-				}
+		}
+		else if (this.getCursores().right.isDown){
+			this.getPersonaje().body.velocity.x = 500;
+			if (this.getFacing() != 'right'){
+					this.getPersonaje().animations.play('right');
+					this.setFacing('right');
 			}
+		} else {
+			if (this.getFacing() != 'idle'){
+					this.getPersonaje().animations.stop();
 		
-	
+					if (this.getFacing() == 'left'){
+						this.getPersonaje().frame = 8;
+					}
+					else{
+						this.getPersonaje().frame = 7;
+					}
+					this.setFacing('idle')
+			}
+		}
+		
+		//GAMEOVER
+		if(this.getVida()==0){
+			var gameOverText = this.getGame().add.image(this.getGame().world.centerX-130,this.getGame().world.centerY-125,'gameover');			
+		}
+
 			
 	}
 	
@@ -315,14 +384,24 @@ class Costanera
 			personaje.kill(personaje);
 			console.log(this.getVida());
 		}
+
+		
+
+		this.setPuntos(this.getPuntos() + 20);
+		this.getPuntosTexto().text = 'Puntos: ' + this.getPuntos().toString();
+		
 	}
 
 
 	collisionSuelFrut(objetos, suelo){
 		suelo.kill();
 		
-		if (suelo.kill()){
-			this.vida == this.vida + 1; 			
+		this.setVida(this.getVida()-1)
+		this.getVidaTexto().text = 'Vidas : ' + this.getVida().toString();
+
+		if (this.getVida() == 0){
+			objetos.kill();
+			this.getPersonaje().body.collideWorldBounds = false;
 		}
 		
 	}

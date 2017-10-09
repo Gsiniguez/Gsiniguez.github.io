@@ -52,7 +52,15 @@ var Costanera = /** @class */ (function () {
             getSuelo: this.getSuelo,
             setSuelo: this.setSuelo,
             getVida: this.getVida,
-            setvida: this.setVida,
+            setVida: this.setVida,
+            getVidaTexto: this.getVidaTexto,
+            setVidaTexto: this.setVidaTexto,
+            getPuntos: this.getPuntos,
+            setPuntos: this.setPuntos,
+            getPuntosTexto: this.getPuntosTexto,
+            setPuntosTexto: this.setPuntosTexto,
+            getGameOver: this.getGameOver,
+            setGameOver: this.setGameOver,
         }));
     }
     //--------------------setters y getters --------------------------------------
@@ -122,6 +130,30 @@ var Costanera = /** @class */ (function () {
     Costanera.prototype.getEmitter = function () {
         return this.emitter;
     };
+    Costanera.prototype.setVidaTexto = function (value) {
+        this.vidaTexto = value;
+    };
+    Costanera.prototype.getVidaTexto = function () {
+        return this.vidaTexto;
+    };
+    Costanera.prototype.setPuntos = function (value) {
+        this.puntos = value;
+    };
+    Costanera.prototype.getPuntos = function () {
+        return this.puntos;
+    };
+    Costanera.prototype.setPuntosTexto = function (value) {
+        this.puntosTexto = value;
+    };
+    Costanera.prototype.getPuntosTexto = function () {
+        return this.puntosTexto;
+    };
+    Costanera.prototype.setGameOver = function (value) {
+        this.gameover = value;
+    };
+    Costanera.prototype.getGameOver = function () {
+        return this.gameover;
+    };
     Costanera.prototype.preload = function () {
         // add our logo image to the assets class under the
         // key 'logo'. We're also setting the background colour
@@ -131,6 +163,7 @@ var Costanera = /** @class */ (function () {
         this.getGame().load.spritesheet('player', 'assets/Personaje.png', 36.5, 48);
         this.getGame().load.image('costanera', "assets/costanera.jpg");
         this.getGame().load.spritesheet('suelo', "assets/suelotile.png", this.getGame().width, 10, 100);
+        this.getGame().load.image('gameover', "assets/gameover.png");
         //Agregamos un comentario para probar subir cambios a GIT desde el editor
         //hacemos un cambio en el archivo
     };
@@ -196,6 +229,17 @@ var Costanera = /** @class */ (function () {
         this.getEmitter().setXSpeed(-1, 1);
         this.getEmitter().start(false, 3000, 1, 0);
         //this.getEmitter().bounce.setTo(0.5, 0.5);
+        //Score
+        this.setPuntos(0);
+        var scoreString = 'Puntos : ';
+        var scoreText = this.getGame().add.text(this.getGame().world.width / 2, 10, scoreString + this.getPuntos(), { font: '34px Arial', fill: '#fff' });
+        this.setPuntosTexto(scoreText);
+        //this.getPuntosTexto().text = this.getPuntos().toString();
+        //  Lives
+        this.setVida(5);
+        //var lives = this.getGame().add.group();
+        var liveText = this.getGame().add.text(10, 10, 'Vidas : ' + this.getVida(), { font: '34px Arial', fill: '#fff' });
+        this.setVidaTexto(liveText);
     };
     Costanera.prototype.update = function () {
         // this.game.physics.arcade.collide(this.player, platforms);
@@ -232,6 +276,10 @@ var Costanera = /** @class */ (function () {
                 this.setFacing('idle');
             }
         }
+        //GAMEOVER
+        if (this.getVida() == 0) {
+            var gameOverText = this.getGame().add.image(this.getGame().world.centerX - 130, this.getGame().world.centerY - 125, 'gameover');
+        }
     };
     Costanera.prototype.collisionPerFrut = function (objetos, personaje) {
         // this.getGame().stage.backgroundColor = '#992d2d';
@@ -244,11 +292,16 @@ var Costanera = /** @class */ (function () {
             personaje.kill(personaje);
             console.log(this.getVida());
         }
+        this.setPuntos(this.getPuntos() + 20);
+        this.getPuntosTexto().text = 'Puntos: ' + this.getPuntos().toString();
     };
     Costanera.prototype.collisionSuelFrut = function (objetos, suelo) {
         suelo.kill();
-        if (suelo.kill()) {
-            this.vida == this.vida + 1;
+        this.setVida(this.getVida() - 1);
+        this.getVidaTexto().text = 'Vidas : ' + this.getVida().toString();
+        if (this.getVida() == 0) {
+            objetos.kill();
+            this.getPersonaje().body.collideWorldBounds = false;
         }
     };
     Costanera.prototype.listener = function () {
