@@ -13,8 +13,6 @@ class Costanera
 	saltarBtn:Phaser.Key;
 	facing: string;
 	emitter: Phaser.Particles.Arcade.Emitter;
-	emitter2: Phaser.Particles.Arcade.Emitter;
-	emitter3: Phaser.Particles.Arcade.Emitter;	
 	vidaTexto: Phaser.Text;
 	puntos: number;
 	puntosTexto: Phaser.Text;
@@ -409,11 +407,17 @@ class Costanera
 		
 		this.setFrutaDificultad(1);
 		}
+
 		if(this.getFrutaDificultad()==1 && this.getPuntos()==300)
 		{
 			this.setFrutaDificultad(2);
 			this.getGame().time.events.repeat(Phaser.Timer.SECOND , 0, this.moreDificult, this);
-			console.log('hola');
+		}
+
+		if(this.getFrutaDificultad()==2 && this.getPuntos()==900)
+		{
+			this.setFrutaDificultad(3);
+			this.getGame().time.events.repeat(Phaser.Timer.SECOND , 0, this.moreDificult, this);
 		}
 	}
 
