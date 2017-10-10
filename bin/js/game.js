@@ -48,6 +48,7 @@ var Costanera = /** @class */ (function () {
             setEmitter: this.setEmitter,
             collisionPerFrut: this.collisionPerFrut,
             collisionSuelFrut: this.collisionSuelFrut,
+            moreDificult: this.moreDificult,
             listener: this.listener,
             getSuelo: this.getSuelo,
             setSuelo: this.setSuelo,
@@ -61,9 +62,21 @@ var Costanera = /** @class */ (function () {
             setPuntosTexto: this.setPuntosTexto,
             getGameOver: this.getGameOver,
             setGameOver: this.setGameOver,
+            getFrutaCantidad: this.getFrutaCantidad,
+            setFrutaCantidad: this.setFrutaCantidad,
+            getFrutaDificultad: this.getFrutaDificultad,
+            setFrutaDificultad: this.setFrutaDificultad,
+            getWait: this.getWait,
+            setWait: this.setWait,
         }));
     }
     //--------------------setters y getters --------------------------------------
+    Costanera.prototype.setWait = function (value) {
+        this.wait = value;
+    };
+    Costanera.prototype.getWait = function () {
+        return this.wait;
+    };
     Costanera.prototype.setVida = function (value) {
         this.vida = value;
     };
@@ -154,6 +167,18 @@ var Costanera = /** @class */ (function () {
     Costanera.prototype.getGameOver = function () {
         return this.gameover;
     };
+    Costanera.prototype.setFrutaCantidad = function (value) {
+        this.frutaCantidad = value;
+    };
+    Costanera.prototype.getFrutaCantidad = function () {
+        return this.frutaCantidad;
+    };
+    Costanera.prototype.setFrutaDificultad = function (value) {
+        this.frutaDificultad = value;
+    };
+    Costanera.prototype.getFrutaDificultad = function () {
+        return this.frutaDificultad;
+    };
     Costanera.prototype.preload = function () {
         // add our logo image to the assets class under the
         // key 'logo'. We're also setting the background colour
@@ -204,31 +229,9 @@ var Costanera = /** @class */ (function () {
         this.getPersonaje().animations.add('turn', [4], 20, true);
         this.getPersonaje().animations.add('right', [1, 2, 3, 4, 5, 6], 10, true);
         this.setFacing('left');
-        //obstaculo
-        var obstaculo = this.getGame().add.sprite(20, 20, 'obstaculo');
-        this.setObstaculo(obstaculo);
-        obstaculo.name = 'obstaculo';
-        this.getGame().physics.enable(obstaculo, Phaser.Physics.ARCADE);
-        logo.inputEnabled = true;
-        logo.events.onInputDown.add(this.listener, this);
-        //this.getObstaculo().body.velocity.y = 10;
-        //  This adjusts the collision body size.
-        //  220x10 is the new width/height.
-        //  See the offset bounding box for another example.
-        this.getObstaculo().body.setSize(10, 10, 0, 0);
+        //Botones
         this.setCursores(this.getGame().input.keyboard.createCursorKeys());
         this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
-        //emitter
-        var emitter = this.getGame().add.emitter(this.getGame().world.centerX, 5, 5);
-        this.setEmitter(emitter);
-        this.getEmitter().width = this.getGame().world.width - 10;
-        this.getEmitter().makeParticles('obstaculo', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 2, true, false);
-        // emitter.minParticleScale = 0.1;
-        // emitter.maxParticleScale = 0.5;
-        this.getEmitter().setYSpeed(100, 200);
-        this.getEmitter().setXSpeed(-1, 1);
-        this.getEmitter().start(false, 3000, 1, 0);
-        //this.getEmitter().bounce.setTo(0.5, 0.5);
         //Score
         this.setPuntos(0);
         var scoreString = 'Puntos : ';
@@ -240,6 +243,7 @@ var Costanera = /** @class */ (function () {
         //var lives = this.getGame().add.group();
         var liveText = this.getGame().add.text(10, 10, 'Vidas : ' + this.getVida(), { font: '34px Arial', fill: '#fff' });
         this.setVidaTexto(liveText);
+        this.setFrutaDificultad(0);
     };
     Costanera.prototype.update = function () {
         // this.game.physics.arcade.collide(this.player, platforms);
@@ -276,10 +280,45 @@ var Costanera = /** @class */ (function () {
                 this.setFacing('idle');
             }
         }
+        if (this.getCursores().left.isDown && this.getSaltarBtn().isDown) {
+            this.getPersonaje().body.velocity.x = -1500;
+            if (this.getFacing() != 'left') {
+                this.getPersonaje().animations.play('left');
+                this.setFacing('left');
+            }
+        }
+        else if (this.getCursores().right.isDown && this.getSaltarBtn().isDown) {
+            this.getPersonaje().body.velocity.x = 1500;
+            if (this.getFacing() != 'right') {
+                this.getPersonaje().animations.play('right');
+                this.setFacing('right');
+            }
+        }
         //GAMEOVER
         if (this.getVida() == 0) {
             var gameOverText = this.getGame().add.image(this.getGame().world.centerX - 130, this.getGame().world.centerY - 125, 'gameover');
         }
+        //Emitter speed
+        if (this.getFrutaDificultad() == 0) {
+            //emitter
+            var emitter = this.getGame().add.emitter(this.getGame().world.centerX, 5, 5);
+            this.setEmitter(emitter);
+            this.getEmitter().width = this.getGame().world.width - 10;
+            this.setFrutaCantidad(1);
+            this.getEmitter().makeParticles('obstaculo', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], this.getFrutaCantidad(), true, false);
+            this.getEmitter().setYSpeed(100, 200);
+            this.getEmitter().setXSpeed(-1, 1);
+            this.getEmitter().start(false, 3000, 1, 0);
+            this.setFrutaDificultad(1);
+        }
+        if (this.getFrutaDificultad() == 1 && this.getPuntos() == 300) {
+            this.setFrutaDificultad(2);
+            this.getGame().time.events.repeat(Phaser.Timer.SECOND, 0, this.moreDificult, this);
+            console.log('hola');
+        }
+    };
+    Costanera.prototype.moreDificult = function () {
+        this.getEmitter().makeParticles('obstaculo', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], this.getFrutaCantidad(), true, false);
     };
     Costanera.prototype.collisionPerFrut = function (objetos, personaje) {
         // this.getGame().stage.backgroundColor = '#992d2d';
@@ -292,7 +331,7 @@ var Costanera = /** @class */ (function () {
             personaje.kill(personaje);
             console.log(this.getVida());
         }
-        this.setPuntos(this.getPuntos() + 20);
+        this.setPuntos(this.getPuntos() + 50);
         this.getPuntosTexto().text = 'Puntos: ' + this.getPuntos().toString();
     };
     Costanera.prototype.collisionSuelFrut = function (objetos, suelo) {
@@ -305,7 +344,7 @@ var Costanera = /** @class */ (function () {
         }
     };
     Costanera.prototype.listener = function () {
-        this.getPersonaje().revive();
+        //this.getPersonaje().revive();
     };
     return Costanera;
 }());
