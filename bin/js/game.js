@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Bonus = /** @class */ (function (_super) {
+var Bonus = (function (_super) {
     __extends(Bonus, _super);
     function Bonus() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -16,7 +16,7 @@ var Bonus = /** @class */ (function (_super) {
     return Bonus;
 }(Phaser.Sprite));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
-var Costanera = /** @class */ (function () {
+var Costanera = (function () {
     function Costanera(ancho, alto) {
         // create our phaser game
         // 800 - width
@@ -305,7 +305,7 @@ var Costanera = /** @class */ (function () {
             this.setEmitter(emitter);
             this.getEmitter().width = this.getGame().world.width - 10;
             this.setFrutaCantidad(1);
-            this.getEmitter().makeParticles('obstaculo', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], this.getFrutaCantidad(), true, false);
+            this.getGame().time.events.repeat(Phaser.Timer.SECOND * 5, 0, this.moreDificult, this);
             this.getEmitter().setYSpeed(100, 200);
             this.getEmitter().setXSpeed(-1, 1);
             this.getEmitter().start(false, 3000, 1, 0);
@@ -313,8 +313,11 @@ var Costanera = /** @class */ (function () {
         }
         if (this.getFrutaDificultad() == 1 && this.getPuntos() == 300) {
             this.setFrutaDificultad(2);
-            this.getGame().time.events.repeat(Phaser.Timer.SECOND, 0, this.moreDificult, this);
-            console.log('hola');
+            this.getGame().time.events.repeat(Phaser.Timer.SECOND + 2000, 0, this.moreDificult, this);
+        }
+        if (this.getFrutaDificultad() == 2 && this.getPuntos() == 900) {
+            this.setFrutaDificultad(3);
+            this.getGame().time.events.repeat(Phaser.Timer.SECOND + 2000, 0, this.moreDificult, this);
         }
     };
     Costanera.prototype.moreDificult = function () {
@@ -352,7 +355,7 @@ var Costanera = /** @class */ (function () {
 window.onload = function () {
     var game = new Costanera(window.innerWidth, window.innerHeight);
 };
-var Fruta = /** @class */ (function (_super) {
+var Fruta = (function (_super) {
     __extends(Fruta, _super);
     function Fruta() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -360,14 +363,14 @@ var Fruta = /** @class */ (function (_super) {
     return Fruta;
 }(Bonus));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
-var Personaje = /** @class */ (function (_super) {
+var Personaje = (function (_super) {
     __extends(Personaje, _super);
     function Personaje() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Personaje;
 }(Phaser.Sprite));
-var Roca = /** @class */ (function (_super) {
+var Roca = (function (_super) {
     __extends(Roca, _super);
     function Roca() {
         return _super !== null && _super.apply(this, arguments) || this;
