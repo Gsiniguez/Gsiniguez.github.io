@@ -400,10 +400,10 @@ class Costanera
 		this.setEmitter(emitter);
 		this.getEmitter().width = this.getGame().world.width-10;
 		this.setFrutaCantidad(1);
-		this.getGame().time.events.repeat(Phaser.Timer.SECOND*5 , 0, this.moreDificult, this);
+		this.getGame().time.events.repeat(Phaser.Timer.SECOND+3000 , 0, this.moreDificult, this);
 		this.getEmitter().setYSpeed(100, 200);
 		this.getEmitter().setXSpeed(-1, 1);
-		this.getEmitter().start(false, 3000, 1, 0);
+		this.getEmitter().start(false, 2000, 1, 0);
 		
 		this.setFrutaDificultad(1);
 		}
@@ -411,14 +411,16 @@ class Costanera
 		if(this.getFrutaDificultad()==1 && this.getPuntos()==300)
 		{
 			this.setFrutaDificultad(2);
-			this.getGame().time.events.repeat(Phaser.Timer.SECOND+2000 , 0, this.moreDificult, this);
+			this.getGame().time.events.repeat(Phaser.Timer.SECOND-500 , 0, this.moreDificult, this);
 		}
 
 		if(this.getFrutaDificultad()==2 && this.getPuntos()==900)
 		{
 			this.setFrutaDificultad(3);
-			this.getGame().time.events.repeat(Phaser.Timer.SECOND+2000 , 0, this.moreDificult, this);
+			this.getGame().time.events.repeat(Phaser.Timer.SECOND-500 , 0, this.moreDificult, this);
 		}
+
+	
 	}
 
 	moreDificult(){
