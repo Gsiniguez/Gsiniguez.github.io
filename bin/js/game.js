@@ -8,15 +8,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Bonus = /** @class */ (function (_super) {
-    __extends(Bonus, _super);
-    function Bonus() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Bonus;
-}(Phaser.Sprite));
+// /// <reference path="../tsDefinitions/phaser.d.ts" />
+var JuegoCostanera;
+(function (JuegoCostanera) {
+    var Bonus = (function (_super) {
+        __extends(Bonus, _super);
+        function Bonus() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Bonus;
+    }(Phaser.Sprite));
+    JuegoCostanera.Bonus = Bonus;
+})(JuegoCostanera || (JuegoCostanera = {}));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
-var Costanera = /** @class */ (function () {
+var Costanera = (function () {
     function Costanera(ancho, alto) {
         // create our phaser game
         // 800 - width
@@ -355,25 +360,27 @@ var Costanera = /** @class */ (function () {
 window.onload = function () {
     var game = new Costanera(window.innerWidth, window.innerHeight);
 };
-var Fruta = /** @class */ (function (_super) {
-    __extends(Fruta, _super);
-    function Fruta() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Fruta;
-}(Bonus));
-/// <reference path="../tsDefinitions/phaser.d.ts" />
-var Personaje = /** @class */ (function (_super) {
-    __extends(Personaje, _super);
-    function Personaje() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Personaje;
-}(Phaser.Sprite));
-var Roca = /** @class */ (function (_super) {
-    __extends(Roca, _super);
-    function Roca() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Roca;
-}(Bonus));
+// /// <reference path="../tsDefinitions/phaser.d.ts" />
+var JuegoCostanera;
+(function (JuegoCostanera) {
+    var Fruta = (function (_super) {
+        __extends(Fruta, _super);
+        function Fruta() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Fruta;
+    }(Phaser.Sprite));
+    JuegoCostanera.Fruta = Fruta;
+})(JuegoCostanera || (JuegoCostanera = {}));
+// /// <reference path="../tsDefinitions/phaser.d.ts" />
+var JuegoCostanera;
+(function (JuegoCostanera) {
+    var Personaje = (function (_super) {
+        __extends(Personaje, _super);
+        function Personaje() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Personaje;
+    }(Phaser.Sprite));
+    JuegoCostanera.Personaje = Personaje;
+})(JuegoCostanera || (JuegoCostanera = {}));
