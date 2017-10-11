@@ -1,49 +1,3 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-// /// <reference path="../tsDefinitions/phaser.d.ts" />
-var JuegoCostanera;
-(function (JuegoCostanera) {
-    var Bonus = (function (_super) {
-        __extends(Bonus, _super);
-        function Bonus() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Bonus;
-    }(Phaser.Sprite));
-    JuegoCostanera.Bonus = Bonus;
-})(JuegoCostanera || (JuegoCostanera = {}));
-// /// <reference path="../tsDefinitions/phaser.d.ts" />
-var JuegoCostanera;
-(function (JuegoCostanera) {
-    var Personaje = (function (_super) {
-        __extends(Personaje, _super);
-        function Personaje() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Personaje;
-    }(Phaser.Sprite));
-    JuegoCostanera.Personaje = Personaje;
-})(JuegoCostanera || (JuegoCostanera = {}));
-// /// <reference path="../tsDefinitions/phaser.d.ts" />
-var JuegoCostanera;
-(function (JuegoCostanera) {
-    var Fruta = (function (_super) {
-        __extends(Fruta, _super);
-        function Fruta() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Fruta;
-    }(Phaser.Sprite));
-    JuegoCostanera.Fruta = Fruta;
-})(JuegoCostanera || (JuegoCostanera = {}));
 /// <reference path="../tsDefinitions/phaser.d.ts" />
 /// <reference path="./Personaje.ts" />
 /// <reference path="./Fruta.ts" />
@@ -390,10 +344,3 @@ var JuegoCostanera;
         var game = new Costanera(window.innerWidth, window.innerHeight);
     };
 })(JuegoCostanera || (JuegoCostanera = {}));
-var Roca = (function (_super) {
-    __extends(Roca, _super);
-    function Roca() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Roca;
-}(Bonus));
