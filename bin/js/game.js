@@ -264,13 +264,8 @@ var JuegoCostanera;
             this.getGame().time.desiredFps = 30;
             this.getGame().physics.arcade.gravity.y = 250;
             //suelo
-            var suelo = this.getGame().add.sprite(this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
+            var suelo = new JuegoCostanera.Suelo(this.getGame(), this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
             this.setSuelo(suelo);
-            this.getGame().physics.enable(this.getSuelo(), Phaser.Physics.ARCADE);
-            suelo.name = 'suelo';
-            suelo.x = 0;
-            suelo.y = this.getGame().world.y + this.getGame().world.height - 30;
-            suelo.width = this.getGame().width;
             //Personaje
             var personaje = new JuegoCostanera.Personaje(this.getGame(), this.getGame().world.centerX, this.getGame().world.top, 'player');
             this.setPersonaje(personaje);
@@ -394,4 +389,29 @@ var JuegoCostanera;
     window.onload = function () {
         var game = new Costanera(window.innerWidth, window.innerHeight);
     };
+})(JuegoCostanera || (JuegoCostanera = {}));
+// /// <reference path="../tsDefinitions/phaser.d.ts" />
+var JuegoCostanera;
+(function (JuegoCostanera) {
+    var Suelo = (function (_super) {
+        __extends(Suelo, _super);
+        function Suelo(game, x, y, frame) {
+            var _this = _super.call(this, game, x, y, frame) || this;
+            _this.getGame().physics.enable(_this, Phaser.Physics.ARCADE);
+            _this.name = 'suelo';
+            _this.x = 0;
+            _this.y = _this.getGame().world.y + _this.getGame().world.height - 30;
+            _this.width = _this.getGame().width;
+            game.add.existing(_this);
+            return _this;
+        }
+        Suelo.prototype.setGame = function (value) {
+            this.game = value;
+        };
+        Suelo.prototype.getGame = function () {
+            return this.game;
+        };
+        return Suelo;
+    }(JuegoCostanera.Bonus));
+    JuegoCostanera.Suelo = Suelo;
 })(JuegoCostanera || (JuegoCostanera = {}));

@@ -11,7 +11,7 @@ module JuegoCostanera{
 		alto:number;
 		personaje: Personaje;
 		fruta: Fruta;
-		suelo: Phaser.Sprite;
+		suelo: Suelo;
 		cursores:Phaser.CursorKeys;
 		saltarBtn:Phaser.Key;
 		vidaTexto: Phaser.Text;
@@ -33,7 +33,7 @@ module JuegoCostanera{
 			return this.wait;
 		}
 	
-		setSuelo(value:Phaser.Sprite){
+		setSuelo(value:Suelo){
 			this.suelo = value;
 		}	
 	
@@ -227,13 +227,9 @@ module JuegoCostanera{
 
 
 			//suelo
-			var suelo = this.getGame().add.sprite(this.getGame().world.centerX,this.getGame().world.centerY,'suelo');
+			var suelo = new Suelo(this.getGame(),this.getGame().world.centerX,this.getGame().world.centerY,'suelo');
 			this.setSuelo(suelo);
-			this.getGame().physics.enable(this.getSuelo(),Phaser.Physics.ARCADE);
-			suelo.name = 'suelo';
-			suelo.x = 0;
-			suelo.y = this.getGame().world.y+this.getGame().world.height-30;
-			suelo.width = this.getGame().width;
+			
 
 
 			//Personaje
