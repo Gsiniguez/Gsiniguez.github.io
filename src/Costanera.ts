@@ -14,25 +14,17 @@ module JuegoCostanera{
 		suelo: Suelo;
 		cursores:Phaser.CursorKeys;
 		saltarBtn:Phaser.Key;
+		restartBtn:Phaser.Key;
 		vidaTexto: Phaser.Text;
 		puntosTexto: Phaser.Text;
 		gameover: Phaser.Text;
 		frutaCantidad: number;
 		frutaDificultad:number;
-		wait:number;
-	
+		
 		
 	
 	//--------------------setters y getters --------------------------------------
 		
-		setWait(value){
-			this.wait = value;
-		}
-	
-		getWait(){
-			return this.wait;
-		}
-	
 		setSuelo(value:Suelo){
 			this.suelo = value;
 		}	
@@ -87,6 +79,14 @@ module JuegoCostanera{
 	
 		getSaltarBtn (){
 			return this.saltarBtn;
+		}
+
+		setResetBtn(value){
+			this.restartBtn = value;
+		}
+
+		getResetBtn(){
+			return this.restartBtn;
 		}
 	
 		setVidaTexto(value){
@@ -165,10 +165,13 @@ module JuegoCostanera{
 				getCursores: this.getCursores,
 				setSaltarBtn: this.setSaltarBtn,
 				getSaltarBtn: this.getSaltarBtn,
+				setResetBtn: this.setResetBtn,
+				getResetBtn: this.getResetBtn,
 				collisionPerFrut: this.collisionPerFrut,
 				collisionSuelFrut: this.collisionSuelFrut,
 				moreDificult: this.moreDificult,
 				personajeDie: this.personajeDie,
+				restart: this.restart,
 				listener: this.listener,
 				getSuelo : this.getSuelo,
 				setSuelo: this.setSuelo,
@@ -182,8 +185,6 @@ module JuegoCostanera{
 				setFrutaCantidad: this.setFrutaCantidad,
 				getFrutaDificultad: this.getFrutaDificultad,
 				setFrutaDificultad: this.setFrutaDificultad,
-				getWait: this.getWait,
-				setWait: this.setWait,
 			} ));
 		}
 
@@ -193,11 +194,12 @@ module JuegoCostanera{
 			// key 'logo'. We're also setting the background colour
 			// so it's the same as the background colour in the image
 			//this.getGame().load.image('obstaculo', 'assets/manzana.png');
-			this.getGame().load.spritesheet('fruta', 'assets/fruitnveg32wh37.png', 32, 32);
+			this.getGame().load.spritesheet('fruta', 'assets/fruitnveg64wh37.png', 64, 64);
 			this.getGame().load.spritesheet('player', 'assets/Personaje.png', 36.5, 48);
 			this.getGame().load.image( 'costanera', "assets/costanera.jpg" );
 			this.getGame().load.spritesheet('suelo', "assets/suelotile.png",this.getGame().width,10,100 );
 			this.getGame().load.image('gameover', "assets/gameover.png" )
+			
 
 			//Agregamos un comentario para probar subir cambios a GIT desde el editor
 			//hacemos un cambio en el archivo
@@ -240,8 +242,7 @@ module JuegoCostanera{
 			//Botones
 			this.setCursores(this.getGame().input.keyboard.createCursorKeys());
 			this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
-
-
+			this.setResetBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.R));
 
 
 			//Score text
@@ -249,17 +250,13 @@ module JuegoCostanera{
 			var scoreText = this.getGame().add.text(this.getGame().world.width/2, 10, scoreString + this.getPersonaje().getPuntos(), { font: '34px Arial', fill: '#fff' });
 			this.setPuntosTexto(scoreText);
 
+
 			//Vida Text
 			var liveText = this.getGame().add.text(10, 10, 'Vidas : ' + this.getPersonaje().getVida(), { font: '34px Arial', fill: '#fff' });
 			this.setVidaTexto(liveText);
 
 
-
-
-
 			this.setFrutaDificultad(0);	
-		
-
 		}
 
 
@@ -331,7 +328,7 @@ module JuegoCostanera{
 			//Emitter speed
 			if(this.getFrutaDificultad()==0){
 			//Fruta Emitter
-			var fruta = new Fruta(this.getGame(),this.getGame().world.centerX, 5,5);
+			var fruta = new Fruta(this.getGame(),this.getGame().world.centerX, 5);
 			this.setFruta(fruta);
 			this.getGame().time.events.repeat(Phaser.Timer.SECOND*5 , 0, this.moreDificult, this);
 			this.setFrutaCantidad(1);
@@ -350,6 +347,10 @@ module JuegoCostanera{
 				this.getGame().time.events.repeat(Phaser.Timer.SECOND+2000 , 0, this.moreDificult, this);
 			}
 
+			if(this.getResetBtn().isDown){
+				this.getPersonaje().setVida(5);
+			}
+
 			//Collisiones
 			// this.game.physics.arcade.collide(this.player, platforms);
 			this.getGame().physics.arcade.collide(this.getFruta().getEmitter(),this.getPersonaje(),this.collisionPerFrut,null, this);
@@ -365,6 +366,10 @@ module JuegoCostanera{
 			this.getPersonaje().exists = false;	
 		}
 
+		restart(){
+			this.getPersonaje().setVida(5);
+		}
+
 
 		collisionPerFrut (objetos, personaje ) {
 		// this.getGame().stage.backgroundColor = '#992d2d';
@@ -373,10 +378,6 @@ module JuegoCostanera{
 
 			if(personaje.kill()){	
 				console.log(this.getPersonaje().vida);
-			}
-			if(this.getPersonaje().getVida()==2){
-				personaje.kill(personaje);
-				console.log(this.getPersonaje().getVida());
 			}
 
 			this.getPersonaje().setPuntos(this.getPersonaje().getPuntos() + 50);
@@ -395,9 +396,12 @@ module JuegoCostanera{
 				this.getGame().time.events.repeat(Phaser.Timer.SECOND+2000 , 0, this.personajeDie, this);		
 				//GAMEOVER
 				var gameOverText = this.getGame().add.image(this.getGame().world.centerX-130,this.getGame().world.centerY-125,'gameover');			
-			
+				//Reset text
+				var resetText = this.getGame().add.text(this.getGame().world.centerX-100,this.getGame().world.centerY-190,"Press R to Restart.", { font: '34px Arial', fill: '#fff' })
+				if(this.getResetBtn().isDown){
+					this.getPersonaje().setVida(5);
+				}
 			}
-
 		}
 
 		listener () {
