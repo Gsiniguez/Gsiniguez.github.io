@@ -348,6 +348,10 @@ var JuegoCostanera;
             if (this.getResetBtn().isDown) {
                 this.getPersonaje().setVida(5);
             }
+            //RESET
+            if (this.getResetBtn().isDown && this.getPersonaje().getVida() == 0) {
+                this.restart();
+            }
             //Collisiones
             // this.game.physics.arcade.collide(this.player, platforms);
             this.getGame().physics.arcade.collide(this.getFruta().getEmitter(), this.getPersonaje(), this.collisionPerFrut, null, this);
@@ -361,6 +365,11 @@ var JuegoCostanera;
         };
         Costanera.prototype.restart = function () {
             this.getPersonaje().setVida(5);
+            this.getPersonaje().setPuntos(0);
+            var suelo = new JuegoCostanera.Suelo(this.getGame(), this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
+            this.setSuelo(suelo);
+            this.getPersonaje().exists = true;
+            this.getPersonaje().revive();
         };
         Costanera.prototype.collisionPerFrut = function (objetos, personaje) {
             // this.getGame().stage.backgroundColor = '#992d2d';
@@ -384,9 +393,6 @@ var JuegoCostanera;
                 var gameOverText = this.getGame().add.image(this.getGame().world.centerX - 130, this.getGame().world.centerY - 125, 'gameover');
                 //Reset text
                 var resetText = this.getGame().add.text(this.getGame().world.centerX - 100, this.getGame().world.centerY - 190, "Press R to Restart.", { font: '34px Arial', fill: '#fff' });
-                if (this.getResetBtn().isDown) {
-                    this.getPersonaje().setVida(5);
-                }
             }
         };
         Costanera.prototype.listener = function () {

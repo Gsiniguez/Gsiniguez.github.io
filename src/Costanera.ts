@@ -14,7 +14,6 @@ module JuegoCostanera{
 		suelo: Suelo;
 		cursores:Phaser.CursorKeys;
 		saltarBtn:Phaser.Key;
-		restartBtn:Phaser.Key;
 		vidaTexto: Phaser.Text;
 		puntosTexto: Phaser.Text;
 		gameover: Phaser.Text;
@@ -79,14 +78,6 @@ module JuegoCostanera{
 	
 		getSaltarBtn (){
 			return this.saltarBtn;
-		}
-
-		setResetBtn(value){
-			this.restartBtn = value;
-		}
-
-		getResetBtn(){
-			return this.restartBtn;
 		}
 	
 		setVidaTexto(value){
@@ -165,14 +156,10 @@ module JuegoCostanera{
 				getCursores: this.getCursores,
 				setSaltarBtn: this.setSaltarBtn,
 				getSaltarBtn: this.getSaltarBtn,
-				setResetBtn: this.setResetBtn,
-				getResetBtn: this.getResetBtn,
 				collisionPerFrut: this.collisionPerFrut,
 				collisionSuelFrut: this.collisionSuelFrut,
 				moreDificult: this.moreDificult,
 				personajeDie: this.personajeDie,
-				restart: this.restart,
-				listener: this.listener,
 				getSuelo : this.getSuelo,
 				setSuelo: this.setSuelo,
 				getVidaTexto: this.getVidaTexto,
@@ -242,8 +229,6 @@ module JuegoCostanera{
 			//Botones
 			this.setCursores(this.getGame().input.keyboard.createCursorKeys());
 			this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
-			this.setResetBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.R));
-
 
 			//Score text
 			var scoreString = 'Puntos : ';
@@ -347,10 +332,6 @@ module JuegoCostanera{
 				this.getGame().time.events.repeat(Phaser.Timer.SECOND+2000 , 0, this.moreDificult, this);
 			}
 
-			if(this.getResetBtn().isDown){
-				this.getPersonaje().setVida(5);
-			}
-
 			//Collisiones
 			// this.game.physics.arcade.collide(this.player, platforms);
 			this.getGame().physics.arcade.collide(this.getFruta().getEmitter(),this.getPersonaje(),this.collisionPerFrut,null, this);
@@ -364,10 +345,6 @@ module JuegoCostanera{
 
 		personajeDie(){
 			this.getPersonaje().exists = false;	
-		}
-
-		restart(){
-			this.getPersonaje().setVida(5);
 		}
 
 
@@ -397,19 +374,10 @@ module JuegoCostanera{
 				//GAMEOVER
 				var gameOverText = this.getGame().add.image(this.getGame().world.centerX-130,this.getGame().world.centerY-125,'gameover');			
 				//Reset text
-				var resetText = this.getGame().add.text(this.getGame().world.centerX-100,this.getGame().world.centerY-190,"Press R to Restart.", { font: '34px Arial', fill: '#fff' })
-				if(this.getResetBtn().isDown){
-					this.getPersonaje().setVida(5);
-				}
+				var resetText = this.getGame().add.text(this.getGame().world.centerX-100,this.getGame().world.centerY-190,"Press F5 to Restart.", { font: '34px Arial', fill: '#fff' })
+				
 			}
 		}
-
-		listener () {
-			//this.getPersonaje().revive();
-
-		}
-
-
 	
 	}
 

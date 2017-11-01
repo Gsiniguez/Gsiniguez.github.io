@@ -1,7 +1,6 @@
 // /// <reference path="../tsDefinitions/phaser.d.ts" />
 module JuegoCostanera {
     export  class Suelo extends Bonus{
-        emitter: Phaser.Particles.Arcade.Emitter;
         game: Phaser.Game;
 
         constructor(game: Phaser.Game, x: number, y: number,frame: string) {
