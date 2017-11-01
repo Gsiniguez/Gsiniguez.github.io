@@ -128,14 +128,10 @@ var JuegoCostanera;
                 getCursores: this.getCursores,
                 setSaltarBtn: this.setSaltarBtn,
                 getSaltarBtn: this.getSaltarBtn,
-                setResetBtn: this.setResetBtn,
-                getResetBtn: this.getResetBtn,
                 collisionPerFrut: this.collisionPerFrut,
                 collisionSuelFrut: this.collisionSuelFrut,
                 moreDificult: this.moreDificult,
                 personajeDie: this.personajeDie,
-                restart: this.restart,
-                listener: this.listener,
                 getSuelo: this.getSuelo,
                 setSuelo: this.setSuelo,
                 getVidaTexto: this.getVidaTexto,
@@ -192,12 +188,6 @@ var JuegoCostanera;
         };
         Costanera.prototype.getSaltarBtn = function () {
             return this.saltarBtn;
-        };
-        Costanera.prototype.setResetBtn = function (value) {
-            this.restartBtn = value;
-        };
-        Costanera.prototype.getResetBtn = function () {
-            return this.restartBtn;
         };
         Costanera.prototype.setVidaTexto = function (value) {
             this.vidaTexto = value;
@@ -273,7 +263,6 @@ var JuegoCostanera;
             //Botones
             this.setCursores(this.getGame().input.keyboard.createCursorKeys());
             this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
-            this.setResetBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.R));
             //Score text
             var scoreString = 'Puntos : ';
             var scoreText = this.getGame().add.text(this.getGame().world.width / 2, 10, scoreString + this.getPersonaje().getPuntos(), { font: '34px Arial', fill: '#fff' });
@@ -345,13 +334,6 @@ var JuegoCostanera;
                 this.setFrutaDificultad(3);
                 this.getGame().time.events.repeat(Phaser.Timer.SECOND + 2000, 0, this.moreDificult, this);
             }
-            if (this.getResetBtn().isDown) {
-                this.getPersonaje().setVida(5);
-            }
-            //RESET
-            if (this.getResetBtn().isDown && this.getPersonaje().getVida() == 0) {
-                this.restart();
-            }
             //Collisiones
             // this.game.physics.arcade.collide(this.player, platforms);
             this.getGame().physics.arcade.collide(this.getFruta().getEmitter(), this.getPersonaje(), this.collisionPerFrut, null, this);
@@ -362,14 +344,6 @@ var JuegoCostanera;
         };
         Costanera.prototype.personajeDie = function () {
             this.getPersonaje().exists = false;
-        };
-        Costanera.prototype.restart = function () {
-            this.getPersonaje().setVida(5);
-            this.getPersonaje().setPuntos(0);
-            var suelo = new JuegoCostanera.Suelo(this.getGame(), this.getGame().world.centerX, this.getGame().world.centerY, 'suelo');
-            this.setSuelo(suelo);
-            this.getPersonaje().exists = true;
-            this.getPersonaje().revive();
         };
         Costanera.prototype.collisionPerFrut = function (objetos, personaje) {
             // this.getGame().stage.backgroundColor = '#992d2d';
@@ -392,11 +366,8 @@ var JuegoCostanera;
                 //GAMEOVER
                 var gameOverText = this.getGame().add.image(this.getGame().world.centerX - 130, this.getGame().world.centerY - 125, 'gameover');
                 //Reset text
-                var resetText = this.getGame().add.text(this.getGame().world.centerX - 100, this.getGame().world.centerY - 190, "Press R to Restart.", { font: '34px Arial', fill: '#fff' });
+                var resetText = this.getGame().add.text(this.getGame().world.centerX - 100, this.getGame().world.centerY - 190, "Press F5 to Restart.", { font: '34px Arial', fill: '#fff' });
             }
-        };
-        Costanera.prototype.listener = function () {
-            //this.getPersonaje().revive();
         };
         return Costanera;
     }());
