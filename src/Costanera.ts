@@ -138,7 +138,7 @@ module JuegoCostanera{
 			// Phaser.AUTO - determine the renderer automatically (canvas, webgl)
 			// 'content' - the name of the container to add our game to
 			// { preload:this.preload, create:this.create} - functions to call for our states
-			this.setGame(new Phaser.Game( ancho, alto, Phaser.CANVAS, 'content', { 
+			this.setGame(new Phaser.Game( ancho-20, alto-20, Phaser.CANVAS, 'content', { 
 				preload:this.preload, 
 				create:this.create, 
 				update: this.update,
@@ -375,7 +375,6 @@ module JuegoCostanera{
 				var gameOverText = this.getGame().add.image(this.getGame().world.centerX-130,this.getGame().world.centerY-125,'gameover');			
 				//Reset text
 				var resetText = this.getGame().add.text(this.getGame().world.centerX-100,this.getGame().world.centerY-190,"Press F5 to Restart.", { font: '34px Arial', fill: '#fff' })
-				
 			}
 		}
 	

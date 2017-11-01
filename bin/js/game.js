@@ -110,7 +110,7 @@ var JuegoCostanera;
             // Phaser.AUTO - determine the renderer automatically (canvas, webgl)
             // 'content' - the name of the container to add our game to
             // { preload:this.preload, create:this.create} - functions to call for our states
-            this.setGame(new Phaser.Game(ancho, alto, Phaser.CANVAS, 'content', {
+            this.setGame(new Phaser.Game(ancho - 20, alto - 20, Phaser.CANVAS, 'content', {
                 preload: this.preload,
                 create: this.create,
                 update: this.update,
