@@ -13,10 +13,24 @@ var JuegoCostanera;
 (function (JuegoCostanera) {
     var Fruta = (function (_super) {
         __extends(Fruta, _super);
-        function Fruta() {
-            return _super !== null && _super.apply(this, arguments) || this;
+        function Fruta(game, x, y) {
+            var _this = _super.call(this, game, x, y) || this;
+            var emitter = game.add.emitter(game.world.centerX, 5, 5);
+            _this.setEmitter(emitter);
+            _this.getEmitter().width = game.world.width - 20;
+            _this.getEmitter().setYSpeed(100, 200);
+            _this.getEmitter().setXSpeed(-1, 1);
+            _this.getEmitter().start(false, 3000, 1, 0);
+            game.add.existing(_this);
+            return _this;
         }
+        Fruta.prototype.setEmitter = function (value) {
+            this.emitter = value;
+        };
+        Fruta.prototype.getEmitter = function () {
+            return this.emitter;
+        };
         return Fruta;
-    }(Phaser.Sprite));
+    }(JuegoCostanera.Bonus));
     JuegoCostanera.Fruta = Fruta;
 })(JuegoCostanera || (JuegoCostanera = {}));

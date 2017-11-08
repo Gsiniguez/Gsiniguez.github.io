@@ -19,11 +19,38 @@ module JuegoCostanera{
 		gameover: Phaser.Text;
 		frutaCantidad: number;
 		frutaDificultad:number;
+		left:boolean;
+		right:boolean;
+		dash:boolean;
 		
 		
 	
 	//--------------------setters y getters --------------------------------------
 		
+		setLeft(value){
+			this.left = value;
+		}
+
+		getLeft(){
+			return this.left;
+		}
+
+		setRight(value){
+			this.right = value;
+		}
+
+		getRight(){
+			return this.right
+		}
+
+		setDash(value){
+			this.dash = value;
+		}
+
+		getDash(){
+			return this.dash;
+		}
+
 		setSuelo(value:Suelo){
 			this.suelo = value;
 		}	
@@ -172,6 +199,15 @@ module JuegoCostanera{
 				setFrutaCantidad: this.setFrutaCantidad,
 				getFrutaDificultad: this.getFrutaDificultad,
 				setFrutaDificultad: this.setFrutaDificultad,
+				setDash: this.setDash,
+				getDash: this.getDash,
+				setRight: this.setRight,
+				getRight: this.getRight,
+				setLeft:this.setLeft,
+				getLeft: this.getLeft,
+				listenerJump: this.listenerJump,
+				listenerLeft: this.listenerLeft,
+				listenerRight: this.listenerRight,
 			} ));
 		}
 
@@ -187,6 +223,10 @@ module JuegoCostanera{
 			this.getGame().load.spritesheet('suelo', "assets/suelotile.png",this.getGame().width,10,100 );
 			this.getGame().load.image('gameover', "assets/gameover.png" )
 			
+			//Botones
+			this.getGame().load.spritesheet('buttonvertical', 'assets/button-vertical.png',64,64);
+			this.getGame().load.spritesheet('buttonhorizontal', 'assets/button-horizontal.png',96,64);
+			this.getGame().load.spritesheet('buttondash', 'assets/button-round.png',96,96);
 
 			//Agregamos un comentario para probar subir cambios a GIT desde el editor
 			//hacemos un cambio en el archivo
@@ -242,6 +282,32 @@ module JuegoCostanera{
 
 
 			this.setFrutaDificultad(0);	
+
+			// create our virtual game controller buttons 
+			//Boton de Dash
+			var buttondash = this.getGame().add.button(this.getGame().world.width - 140, this.getGame().world.height - 140, 'buttondash', null, this, 0, 1, 0, 1);  //game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame
+			buttondash.fixedToCamera = true;  //our buttons should stay on the same place  
+			buttondash.events.onInputOver.add(this.listenerJump,this,0,true);
+			buttondash.events.onInputOut.add(this.listenerJump,this,0,false);
+			buttondash.events.onInputDown.add(this.listenerJump,this,0,true);
+			buttondash.events.onInputUp.add(this.listenerJump,this,0,false);
+			
+			//Boton izquierda
+			var buttonleft = this.getGame().add.button(30, this.getGame().world.height	- 140, 'buttonhorizontal', null, this, 0, 1, 0, 1);
+			buttonleft.fixedToCamera = true;
+			buttonleft.events.onInputOver.add(this.listenerLeft,this,0,true);
+			buttonleft.events.onInputOut.add(this.listenerLeft,this,0,false);
+			buttonleft.events.onInputDown.add(this.listenerLeft,this,0,true);
+			buttonleft.events.onInputUp.add(this.listenerLeft,this,0,false);
+		
+			//Boton derecha
+			var buttonright = this.getGame().add.button(190, this.getGame().world.height - 140, 'buttonhorizontal', null, this, 0, 1, 0, 1);
+			buttonright.fixedToCamera = true;
+			buttonright.events.onInputOver.add(this.listenerRight,this,0,true);
+			buttonright.events.onInputOut.add(this.listenerRight,this,0,false);
+			buttonright.events.onInputDown.add(this.listenerRight,this,0,true);
+			buttonright.events.onInputUp.add(this.listenerRight,this,0,false);
+
 		}
 
 
@@ -257,7 +323,7 @@ module JuegoCostanera{
 
 			this.getPersonaje().bringToTop();
 
-			if (this.getCursores().left.isDown)
+			if (this.getCursores().left.isDown || this.getLeft())
 			{
 				this.getPersonaje().body.velocity.x = -500;
 				if (this.getPersonaje().getFacing() != 'left')
@@ -266,7 +332,7 @@ module JuegoCostanera{
 						this.getPersonaje().setFacing('left');
 				}
 			}
-			else if (this.getCursores().right.isDown)
+			else if (this.getCursores().right.isDown || this.getRight())
 			{
 				this.getPersonaje().body.velocity.x = 500;
 				if (this.getPersonaje().getFacing() != 'right')
@@ -291,7 +357,7 @@ module JuegoCostanera{
 						this.getPersonaje().setFacing('idle')
 				}
 			}
-			 if (this.getCursores().left.isDown && this.getSaltarBtn().isDown)
+			 if ((this.getCursores().left.isDown || this.getLeft() )&& (this.getSaltarBtn().isDown || this.getDash()) )
 			{
 				this.getPersonaje().body.velocity.x = -1500;
 				if (this.getPersonaje().getFacing() != 'left')
@@ -300,7 +366,7 @@ module JuegoCostanera{
 						this.getPersonaje().setFacing('left');
 				}
 			}
-			else if (this.getCursores().right.isDown && this.getSaltarBtn().isDown)
+			else if ((this.getCursores().right.isDown || this.getRight()) && (this.getSaltarBtn().isDown || this.getDash()) )
 			{
 				this.getPersonaje().body.velocity.x = 1500;
 				if (this.getPersonaje().getFacing() != 'right')
@@ -309,6 +375,8 @@ module JuegoCostanera{
 						this.getPersonaje().setFacing('right');
 				}
 			}
+
+			if (this.getGame().input.totalActivePointers == 0 && !this.getGame().input.activePointer.isMouse){ this.setRight(false); this.setLeft(false); this.setDash(false)} 
 
 			//Emitter speed
 			if(this.getFrutaDificultad()==0){
@@ -376,6 +444,18 @@ module JuegoCostanera{
 				//Reset text
 				var resetText = this.getGame().add.text(this.getGame().world.centerX-100,this.getGame().world.centerY-190,"Press F5 to Restart.", { font: '34px Arial', fill: '#fff' })
 			}
+		}
+
+		listenerJump(key,arg,arg2){
+			this.setDash(arg2);
+		}
+
+		listenerLeft(key,arg,arg2){
+			this.setLeft(arg2);
+		}
+
+		listenerRight(key,arg,arg2){
+			this.setRight(arg2);
 		}
 	
 	}
