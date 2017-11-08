@@ -219,7 +219,7 @@ module JuegoCostanera{
 			//this.getGame().load.image('obstaculo', 'assets/manzana.png');
 			this.getGame().load.spritesheet('fruta', 'assets/fruitnveg64wh37.png', 64, 64);
 			this.getGame().load.spritesheet('player', 'assets/Personaje.png', 36.5, 48);
-			this.getGame().load.image( 'costanera', "assets/costanera.jpg" );
+			this.getGame().load.image( 'costanera', "assets/Costanera.jpg" );
 			this.getGame().load.spritesheet('suelo', "assets/suelotile.png",this.getGame().width,10,100 );
 			this.getGame().load.image('gameover', "assets/gameover.png" )
 			
