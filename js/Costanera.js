@@ -52,23 +52,26 @@ var JuegoCostanera;
                 getRight: this.getRight,
                 setLeft: this.setLeft,
                 getLeft: this.getLeft,
+                listenerJump: this.listenerJump,
+                listenerLeft: this.listenerLeft,
+                listenerRight: this.listenerRight,
             }));
         }
         //--------------------setters y getters --------------------------------------
         Costanera.prototype.setLeft = function (value) {
-            value = this.left;
+            this.left = value;
         };
         Costanera.prototype.getLeft = function () {
             return this.left;
         };
         Costanera.prototype.setRight = function (value) {
-            value = this.right;
+            this.right = value;
         };
         Costanera.prototype.getRight = function () {
             return this.right;
         };
         Costanera.prototype.setDash = function (value) {
-            value = this.dash;
+            this.dash = value;
         };
         Costanera.prototype.getDash = function () {
             return this.dash;
@@ -158,7 +161,7 @@ var JuegoCostanera;
             //this.getGame().load.image('obstaculo', 'assets/manzana.png');
             this.getGame().load.spritesheet('fruta', 'assets/fruitnveg64wh37.png', 64, 64);
             this.getGame().load.spritesheet('player', 'assets/Personaje.png', 36.5, 48);
-            this.getGame().load.image('costanera', "assets/costanera.jpg");
+            this.getGame().load.image('costanera', "assets/Costanera.jpg");
             this.getGame().load.spritesheet('suelo', "assets/suelotile.png", this.getGame().width, 10, 100);
             this.getGame().load.image('gameover', "assets/gameover.png");
             //Botones
@@ -255,14 +258,14 @@ var JuegoCostanera;
                     this.getPersonaje().setFacing('idle');
                 }
             }
-            if (this.getCursores().left.isDown && this.getSaltarBtn().isDown || this.getCursores().left.isDown && this.getDash()) {
+            if ((this.getCursores().left.isDown || this.getLeft()) && (this.getSaltarBtn().isDown || this.getDash())) {
                 this.getPersonaje().body.velocity.x = -1500;
                 if (this.getPersonaje().getFacing() != 'left') {
                     this.getPersonaje().animations.play('left');
                     this.getPersonaje().setFacing('left');
                 }
             }
-            else if (this.getCursores().right.isDown && this.getSaltarBtn().isDown || this.getCursores().left.isDown && this.getDash()) {
+            else if ((this.getCursores().right.isDown || this.getRight()) && (this.getSaltarBtn().isDown || this.getDash())) {
                 this.getPersonaje().body.velocity.x = 1500;
                 if (this.getPersonaje().getFacing() != 'right') {
                     this.getPersonaje().animations.play('right');
